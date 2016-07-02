@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Friend Finder - Survey</title>
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="page-header">
+			<h1>Friend Finder <small>Survey Questions</small></h1>
+		</div>
+		<div class="page-header">
+			<h3>About You</h3>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label for="inputName" class="col-sm-2 control-label">Name (Required)</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="inputName">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="inputPicURL" class="col-sm-2 control-label">Link to Photo Image (Required)</label>
+					<div class="col-sm-10">
+						<input type="text" class="form-control" id="inputPicURL">
+					</div>
+				</div>
+			</form>
+		</div>
+		<h3>Question 1</h3>
+		<h4>You usually plan your actions in advance</h4>
+			<div class="radio">
+			  <label><input type="radio" id="ans1" name="ans1" value="1">Strongly Disagree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans1" name="ans1" value="2">Somewhat Disagree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans1" name="ans1" value="3">Neither Agree nor Disagree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans1" name="ans1" value="4">Somewhat Agree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans1" name="ans1" value="5">Strongly Agree</label>
+			</div>
+
+		<h3>Question 2</h3>
+		<h4>You trust reason rather than feelings</h4>
+			<div class="radio">
+			  <label><input type="radio" id="ans2" name="ans2" value="1">Strongly Disagree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans2" name="ans2" value="2">Somewhat Disagree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans2" name="ans2" value="3">Neither Agree nor Disagree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans2" name="ans2" value="4">Somewhat Agree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans2" name="ans2" value="5">Strongly Agree</label>
+			</div>
+
+		<h3>Question 3</h3>
+		<h4>You believe the best decision is one which can be easily changed</h4>
+			<div class="radio">
+			  <label><input type="radio" id="ans3" name="ans3" value="1">Strongly Disagree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans3" name="ans3" value="2">Somewhat Disagree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans3" name="ans3" value="3">Neither Agree nor Disagree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans3" name="ans3" value="4">Somewhat Agree</label>
+			</div>
+			<div class="radio">
+			  <label><input type="radio" id="ans3" name="ans3" value="5">Strongly Agree</label>
+			</div>
+
+    </div>
+    <button id="submit">Submit</button>
+<script>
+	var scores = [];
+
+    $("#submit").click(function(){
+        console.log($("#ans1:checked").val());
+        console.log($("#ans2:checked").val());
+        console.log($("#ans3:checked").val());
+    });
+
+</script>
+</body>
+</html>
