@@ -29,7 +29,7 @@
 				</div>
 			</form>
 		</div>
-		<h3>Question 1</h3>
+<!-- 		<h3>Question 1</h3>
 		<h4>You usually plan your actions in advance</h4>
 			<div class="radio">
 			  <label><input type="radio" id="ans1" name="ans1" value="1">Strongly Disagree</label>
@@ -82,18 +82,116 @@
 			<div class="radio">
 			  <label><input type="radio" id="ans3" name="ans3" value="5">Strongly Agree</label>
 			</div>
-
+ -->
     </div>
+
+    <!-- Trying alternate method of writing to HTML -->
+<!--     <h3 id="question"></h3>
+
+    <input type="radio" name="choice" value="0" id="choice1">
+	<label id="answ1"></label>
+	<input type="radio" name="choice" value="1" id="choice2">
+	<label id="answ2"></label>
+	<input type="radio" name="choice" value="2" id="choice3">
+	<label id="answ3"></label>
+	<input type="radio" name="choice" value="3" id="choice4">
+	<label id="answ4"></label>
+	<input type="radio" name="choice" value="4" id="choice5">
+	<label id="answ5"></label>
+ -->
     <button id="submit">Submit</button>
 <script>
-	var scores = [];
 
-    $("#submit").click(function(){
-        console.log($("#ans1:checked").val());
-        console.log($("#ans2:checked").val());
-        console.log($("#ans3:checked").val());
-    });
 
+  //   $("#submit").click(function(){
+  //       console.log($("#ans1:checked").val());
+  //       console.log($("#ans2:checked").val());
+  //       console.log($("#ans3:checked").val());
+
+		// var scores = [
+		// 	$("#ans1:checked".val()), 
+		// 	$("#ans2:checked".val()), 
+		// 	$("#ans3:checked".val())
+		// ];
+
+  //       console.log(scores[0]);
+  //       console.log(scores[1]);
+  //       console.log(scores[2]);
+  //   });
+
+
+
+var allQuestions = [
+    "You usually plan your actions in advance", 
+    "You trust reason rather than feelings",
+    "You believe the best decision is one which can be easily changed",
+];
+
+var choices = [
+	"I DISAGREE", "disagree", "neither", "agree", "AGREE"
+];
+
+function appendText() {
+	for(i = 0; i < 3; i++){
+	    var quesHeader = $("<h3></h3>").text("Question " + (i + 1));
+	    var question = $("<h4></h4>").text(allQuestions[i]);
+	    $("body").append(quesHeader, question);
+	    answerChoices(i);
+	}
+}
+
+function answerChoices(quesNumber){
+	$("body").append($("<div>"));
+	for(j = 0; j < 5; j++){
+		var radioInput = "<input type='radio' name='choice' value='" + (j + 1) + "' id='choice" + (j + 1) + "'>";
+		var label =	"<label id='answ" + (j + 1) + "'>" + choices[j] + "</label>";
+	    $("body").append(radioInput, label);  
+	}
+}
+
+function setHeader(questionNum) {
+    var questionHeaderEl = document.getElementById("questionHeader");
+    questionHeaderEl.innerHTML = allQuestions[questionNum].question;
+}
+
+function setAnswer(idEl, questionNum, choiceNum) {
+    var choiceEl = document.getElementById(idEl);
+    choiceEl.innerHTML = allQuestions[questionNum].choices[choiceNum];
+}
+
+
+function showQuestion() {
+    setHeader(questionCount);
+    setAnswer("answ1", questionCount, 0);
+    setAnswer("answ2", questionCount, 1);
+    setAnswer("answ3", questionCount, 2);
+}
+
+
+function updateScore() {
+    var rightAnswer = allQuestions[questionCount].correctAnswer;
+    var chosenAnswer = document.getElementById("choice" + (rightAnswer + 1));
+    if (chosenAnswer.checked) {
+        score++;
+    }
+}
+
+
+function showScore() {
+    if (questionCount >= allQuestions.length) {
+        document.body.innerHTML = "Your score is " + score;
+    }
+}
+
+
+function nextQuestion() {
+    updateScore();
+    questionCount++;
+    showScore();
+    showQuestion();
+}
+
+appendText();
 </script>
 </body>
 </html>
