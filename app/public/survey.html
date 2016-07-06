@@ -29,82 +29,14 @@
 				</div>
 			</form>
 		</div>
-<!-- 		<h3>Question 1</h3>
-		<h4>You usually plan your actions in advance</h4>
-			<div class="radio">
-			  <label><input type="radio" id="ans1" name="ans1" value="1">Strongly Disagree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans1" name="ans1" value="2">Somewhat Disagree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans1" name="ans1" value="3">Neither Agree nor Disagree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans1" name="ans1" value="4">Somewhat Agree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans1" name="ans1" value="5">Strongly Agree</label>
-			</div>
-
-		<h3>Question 2</h3>
-		<h4>You trust reason rather than feelings</h4>
-			<div class="radio">
-			  <label><input type="radio" id="ans2" name="ans2" value="1">Strongly Disagree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans2" name="ans2" value="2">Somewhat Disagree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans2" name="ans2" value="3">Neither Agree nor Disagree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans2" name="ans2" value="4">Somewhat Agree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans2" name="ans2" value="5">Strongly Agree</label>
-			</div>
-
-		<h3>Question 3</h3>
-		<h4>You believe the best decision is one which can be easily changed</h4>
-			<div class="radio">
-			  <label><input type="radio" id="ans3" name="ans3" value="1">Strongly Disagree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans3" name="ans3" value="2">Somewhat Disagree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans3" name="ans3" value="3">Neither Agree nor Disagree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans3" name="ans3" value="4">Somewhat Agree</label>
-			</div>
-			<div class="radio">
-			  <label><input type="radio" id="ans3" name="ans3" value="5">Strongly Agree</label>
-			</div>
- -->
     </div>
 
     <button id="submit">Submit</button>
+
 <script>
-var scores = [];
-
-    $("#submit").click(function(){
-    	for(i = 0; i < 3; i++){
-    		if($("#answ" + (i + 1) + ":checked").val()){
-    			scores[i] = $("#answ" + (i + 1) + ":checked").val();
-    		}
-    		else if (!$("#answ" + (i + 1) + ":checked").val()){
-    			alert("Please answer all questions");
-    			return;
-    		}
-    	}
-        console.log(scores[0]);
-        console.log(scores[1]);
-        console.log(scores[2]);
+// var scores = [];
 
 
-    });
 
 
 
@@ -112,7 +44,13 @@ var allQuestions = [
     "You usually plan your actions in advance", 
     "You trust reason rather than feelings",
     "You believe the best decision is one which can be easily changed",
-    "You experience your emotions intensely"
+    "You experience your emotions intensely",
+    "You like to solve complex problems",
+    "You like being the center of attention",
+    "You believe criminals should receive help rather than punishment",
+    "You believe in the importance of art",
+    "You become overwhelmed by events",
+    "You daydream often"
 ];
 
 var choices = [
@@ -120,7 +58,7 @@ var choices = [
 ];
 
 function appendText() {
-	for(i = 0; i < 3; i++){
+	for(i = 0; i < allQuestions.length; i++){
 	    var quesHeader = $("<h3></h3>").text("Question " + (i + 1));
 	    var question = $("<h4></h4>").text(allQuestions[i]);
 	    $(".container").append(quesHeader, question);
@@ -128,61 +66,54 @@ function appendText() {
 	}
 }
 
-function answerChoices(quesNumber){
+function answerChoices(questionNum){
 	for(j = 0; j < 5; j++){
-		var divInput = "<div class='radio'><label><input type='radio' id='answ" + (i + 1) + "' name='answ" + (i + 1) + "' value='" + (j + 1) + "'>" + choices[j] + "</label></div>";
-		// var label =	"<label id='answ" + (j + 1) + "'>" + choices[j] + "</label><br>";
+		var divInput = "<div class='radio'><label><input type='radio' id='answ" + (questionNum + 1) + "' name='answ" + (questionNum + 1) + "' value='" + (j + 1) + "'>" + choices[j] + "</label></div>";
 	    $(".container").append(divInput);  
 	}
-			// 	<div class="radio">
-			//   <label><input type="radio" id="ans3" name="ans3" value="1">Strongly Disagree</label>
-			// </div>
-
-}
-
-function setHeader(questionNum) {
-    var questionHeaderEl = document.getElementById("questionHeader");
-    questionHeaderEl.innerHTML = allQuestions[questionNum].question;
-}
-
-function setAnswer(idEl, questionNum, choiceNum) {
-    var choiceEl = document.getElementById(idEl);
-    choiceEl.innerHTML = allQuestions[questionNum].choices[choiceNum];
-}
-
-
-function showQuestion() {
-    setHeader(questionCount);
-    setAnswer("answ1", questionCount, 0);
-    setAnswer("answ2", questionCount, 1);
-    setAnswer("answ3", questionCount, 2);
-}
-
-
-function updateScore() {
-    var rightAnswer = allQuestions[questionCount].correctAnswer;
-    var chosenAnswer = document.getElementById("choice" + (rightAnswer + 1));
-    if (chosenAnswer.checked) {
-        score++;
-    }
-}
-
-
-function showScore() {
-    if (questionCount >= allQuestions.length) {
-        document.body.innerHTML = "Your score is " + score;
-    }
-}
-
-
-function nextQuestion() {
-    updateScore();
-    questionCount++;
-    showScore();
-    showQuestion();
 }
 
 appendText();
+
+$("#submit").click(function(){
+   	var newFriend = {
+		name: $("#inputName").val().trim(),
+		photo: $("#inputPicURL").val().trim(),
+		scores: []
+	}
+
+	for(i = 0; i < allQuestions.length; i++){
+		if($("#answ" + (i + 1) + ":checked").val()){		    	
+			newFriend.scores[i] = parseInt($("#answ" + (i + 1) + ":checked").val());
+    		}
+		else if (!$("#answ" + (i + 1) + ":checked").val()){
+			alert("Please answer all questions");
+			return;
+		}
+	}
+	console.log(newFriend.name);
+	console.log(newFriend.photo);  	
+    console.log(newFriend.scores);
+
+    friendQuery(newFriend.scores);
+});
+
+function friendQuery(newScores){
+	var currentURL = window.location.origin;
+	$.ajax({url: currentURL + "/api/friends", method: "GET"}) 
+		.done(function(friendData) {
+				console.log("------------------------------------");
+				console.log("URL: " + currentURL + "/api/friends");
+				console.log("------------------------------------");
+				console.log(friendData);
+				console.log("------------------------------------");
+			for(i = 0; i < friendData.length; i++) {
+				console.log(friendData[i].scores);
+    console.log(newScores);
+			}
+		});
+
+}
 </script>
 </body>
 </html>
