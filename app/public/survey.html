@@ -91,10 +91,6 @@ $("#submit").click(function(){
 			return;
 		}
 	}
-	console.log(newFriend.name);
-	console.log(newFriend.photo);  	
-    console.log(newFriend.scores);
-
     friendQuery(newFriend.scores);
 });
 
@@ -102,14 +98,20 @@ function friendQuery(newScores){
 	var currentURL = window.location.origin;
 	$.ajax({url: currentURL + "/api/friends", method: "GET"}) 
 		.done(function(friendData) {
-				console.log("------------------------------------");
-				console.log("URL: " + currentURL + "/api/friends");
-				console.log("------------------------------------");
-				console.log(friendData);
-				console.log("------------------------------------");
 			for(i = 0; i < friendData.length; i++) {
-				console.log(friendData[i].scores);
-    console.log(newScores);
+				var friendScore = friendData[i].scores;
+				var totalDif = 0;
+				console.log(friendData[i].name + ": " + friendScore);
+			    console.log("Your Score: " + newScores);
+			    var compare = [];
+			    for(j = 0; j < 10; j++){
+			    	compare[j] = Math.abs(friendScore[j] - newScores[j]);
+					totalDif += compare[j];
+					console.log(totalDif);
+					console.log(compare[j]);
+			    }
+				console.log(compare);
+				console.log(friendData[i].name + " Compatibility: " + totalDif);
 			}
 		});
 
