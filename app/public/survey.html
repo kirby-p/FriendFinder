@@ -16,7 +16,7 @@
     left: 0;
     top: 0;
     width: 100%; /* Full width */
-    height: 100%; /* Full height */
+    height: auto; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
@@ -27,7 +27,7 @@
     background-color: #fefefe;
     margin: auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 5px solid #78e6ff;
     width: 80%;
 }
 
@@ -44,6 +44,10 @@
     color: #000;
     text-decoration: none;
     cursor: pointer;
+}
+
+#buttons {
+	text-align: center ;
 }
 </style>
 <body>
@@ -73,12 +77,15 @@
   			<div class="modal-content">
     			<span class="close">x</span>
     			<h3 id="matchTitle">You have a match!</h3>
+    			<div id="matchDisplay"></div>
   			</div>
 		</div>
+	<div id="questions"></div>
+    <div id="buttons">
+	    <button id="submit">Submit</button>
+	    <button id="reset">Reset</button>
     </div>
-
-    <button id="submit">Submit</button>
-
+    </div>
 <script>
 var allQuestions = [
     "You usually plan your actions in advance", 
@@ -101,25 +108,30 @@ var choices = [
 	"Strongly Agree"
 ];
 
-function appendText() {
+(function () {
 	for(i = 0; i < allQuestions.length; i++){
 	    var quesHeader = $("<h3></h3>").text("Question " + (i + 1));
 	    var question = $("<h4></h4>").text(allQuestions[i]);
-	    $(".container").append(quesHeader, question);
+	    $("#questions").append(quesHeader, question);
 	    answerChoices(i);
 	}
-}
+})();
 
 function answerChoices(questionNum){
 	for(j = 0; j < 5; j++){
 		var divInput = "<div class='radio'><label><input type='radio' id='answ" + (questionNum + 1) + "' name='answ" + (questionNum + 1) + "' value='" + (j + 1) + "'>" + choices[j] + "</label></div>";
-	    $(".container").append(divInput);  
+	    $("#questions").append(divInput);  
 	}
 }
 
-appendText();
+// appendText();
 
 $("#submit").click(function(){
+
+	if($("#inputName") == ""){
+		alert("Please enter your name");
+		return;
+	}
    	var newFriend = {
 		name: $("#inputName").val().trim(),
 		photo: $("#inputPicURL").val().trim(),
@@ -171,13 +183,15 @@ function friendQuery(newScores){
 			}
 			console.log("Best Compatibility Rating: " + bestMatch);
 			console.log("Best Friend: " + bestFriend);
-			$("#matchTitle").after("<h4>" + bestFriend + "</h4><img src=" + friendImage + ">");
+			$("#matchDisplay").append("<h4>" + bestFriend + "</h4><img src=" + friendImage + " width='750'>");
 			$('#friendModal').show();
-
 		});
 }
 
-
+$(".close").click(function(){
+	$("#matchDisplay").empty();
+	$('#friendModal').hide();
+});
 
 </script>
 </body>
