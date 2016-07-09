@@ -57,7 +57,7 @@
 		</div>
 		<div class="page-header">
 			<h3>About You</h3>
-			<form class="form-horizontal">
+			<form id="infoForm" class="form-horizontal">
 				<div class="form-group">
 					<label for="inputName" class="col-sm-2 control-label">Name (Required)</label>
 					<div class="col-sm-10">
@@ -108,6 +108,8 @@ var choices = [
 	"Strongly Agree"
 ];
 
+var currentURL = window.location.origin;
+
 (function () {
 	for(i = 0; i < allQuestions.length; i++){
 	    var quesHeader = $("<h3></h3>").text("Question " + (i + 1));
@@ -124,18 +126,23 @@ function answerChoices(questionNum){
 	}
 }
 
-// appendText();
-
 $("#submit").click(function(){
+	var currentURL = window.location.origin;
 
-	if($("#inputName") == ""){
-		alert("Please enter your name");
-		return;
-	}
-   	var newFriend = {
+	var newFriend = {
 		name: $("#inputName").val().trim(),
 		photo: $("#inputPicURL").val().trim(),
 		scores: []
+	};
+
+	if(!newFriend.name){
+		alert("Please enter your name");
+		return;
+	}
+
+	if(!newFriend.photo){
+		alert("Please enter a URL for your photo");
+		return;
 	}
 
 	for(i = 0; i < allQuestions.length; i++){
@@ -147,11 +154,25 @@ $("#submit").click(function(){
 			return;
 		}
 	}
-    friendQuery(newFriend.scores);
+    // friendQuery(newFriend.scores);
+    friendQuery(newFriend);
+    // console.log(newFriend);
+
+	// $.post(currentURL + "/api/friends", 
+	// 	newFriend,
+	// 	function(){
+	//     	// if(data == true){
+	//     	// 	alert("Yay!")
+	//     	// }
+	//     	// if(data == false){
+	//     	// 	alert("Sorry")
+	//     	// }
+
+	// 	});
 });
 
-function friendQuery(newScores){
-	var currentURL = window.location.origin;
+// function friendQuery(newScores){
+function friendQuery(newFriend){
 	$.ajax({url: currentURL + "/api/friends", method: "GET"}) 
 		.done(function(friendData) {
 			var compat = [];
@@ -160,11 +181,11 @@ function friendQuery(newScores){
 				var friendScore = friendData[i].scores;
 				var totalDif = 0;
 				console.log(friendData[i].name + ": " + friendScore);
-			    console.log("Your Score: " + newScores);
+			    console.log("Your Score: " + newFriend.scores);
 			    var compare = [];
 
 			    for(j = 0; j < 10; j++){
-			    	compare[j] = Math.abs(friendScore[j] - newScores[j]);
+			    	compare[j] = Math.abs(friendScore[j] - newFriend.scores[j]);
 					totalDif += compare[j];
 			    }
 				console.log(friendData[i].name + " Compatibility: " + totalDif);
@@ -185,12 +206,24 @@ function friendQuery(newScores){
 			console.log("Best Friend: " + bestFriend);
 			$("#matchDisplay").append("<h4>" + bestFriend + "</h4><img src=" + friendImage + " width='750'>");
 			$('#friendModal').show();
-		});
-}
+	$.post(currentURL + "/api/friends", 
+		newFriend,
+		function(){
+	    	// if(data == true){
+	    	// 	alert("Yay!")
+	    	// }
+	    	// if(data == false){
+	    	// 	alert("Sorry")
+	    	// }
 
+	});
+		});
+		
+}
 $(".close").click(function(){
 	$("#matchDisplay").empty();
-	$('#friendModal').hide();
+	$("#friendModal").hide();
+	$("#infoForm").trigger("reset");
 });
 
 </script>
