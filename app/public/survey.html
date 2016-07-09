@@ -8,18 +8,20 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 </head>
 <style>
+
+/* Modal (Hidden) */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    padding-top: 100px; 
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: auto; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    width: 100%; 
+    height: auto; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
 }
 
 /* Modal Content */
@@ -56,6 +58,8 @@
 			<h1>Friend Finder <small>Survey Questions</small></h1>
 		</div>
 		<div class="page-header">
+
+			<!-- User enters name and photo information -->
 			<h3>About You</h3>
 			<form id="infoForm" class="form-horizontal">
 				<div class="form-group">
@@ -72,6 +76,7 @@
 				</div>
 			</form>
 		</div>
+
 		<!-- Modal -->
 		<div id="friendModal" class="modal">
   			<div class="modal-content">
@@ -80,13 +85,18 @@
     			<div id="matchDisplay"></div>
   			</div>
 		</div>
+
+	<!-- Div where questions will populate -->
 	<div id="questions"></div>
+
+	<!-- Submit and Reset buttons  -->
     <div id="buttons">
 	    <button id="submit">Submit</button>
 	    <button id="reset">Reset</button>
     </div>
     </div>
 <script>
+// Questions array; can easily be updated
 var allQuestions = [
     "You usually plan your actions in advance", 
     "You trust reason rather than feelings",
@@ -100,6 +110,7 @@ var allQuestions = [
     "You daydream often"
 ];
 
+// Answer choices array; all choices to each question will be the same
 var choices = [
 	"Strongly Disagree", 
 	"Somewhat Disagree", 
@@ -110,6 +121,7 @@ var choices = [
 
 var currentURL = window.location.origin;
 
+// Self-invoking function that populates the questions
 (function () {
 	for(i = 0; i < allQuestions.length; i++){
 	    var quesHeader = $("<h3></h3>").text("Question " + (i + 1));
@@ -119,6 +131,7 @@ var currentURL = window.location.origin;
 	}
 })();
 
+// Called after a question has beem populated; creates the answer choices
 function answerChoices(questionNum){
 	for(j = 0; j < 5; j++){
 		var divInput = "<div class='radio'><label><input type='radio' id='answ" + (questionNum + 1) + "' name='answ" + (questionNum + 1) + "' value='" + (j + 1) + "'>" + choices[j] + "</label></div>";
@@ -126,6 +139,7 @@ function answerChoices(questionNum){
 	}
 }
 
+// When clicking on Submit...
 $("#submit").click(function(){
 	var currentURL = window.location.origin;
 
@@ -135,16 +149,19 @@ $("#submit").click(function(){
 		scores: []
 	};
 
+// Checks to see if user input their name
 	if(!newFriend.name){
 		alert("Please enter your name");
 		return;
 	}
 
+// Checks to see if user input URL for their photo
 	if(!newFriend.photo){
 		alert("Please enter a URL for your photo");
 		return;
 	}
 
+// Checks each question to see if they have been answered
 	for(i = 0; i < allQuestions.length; i++){
 		if($("#answ" + (i + 1) + ":checked").val()){		    	
 			newFriend.scores[i] = parseInt($("#answ" + (i + 1) + ":checked").val());
@@ -154,47 +171,46 @@ $("#submit").click(function(){
 			return;
 		}
 	}
-    // friendQuery(newFriend.scores);
     friendQuery(newFriend);
-    // console.log(newFriend);
-
-	// $.post(currentURL + "/api/friends", 
-	// 	newFriend,
-	// 	function(){
-	//     	// if(data == true){
-	//     	// 	alert("Yay!")
-	//     	// }
-	//     	// if(data == false){
-	//     	// 	alert("Sorry")
-	//     	// }
-
-	// 	});
 });
 
-// function friendQuery(newScores){
+// Checks for compatibility with each user in friends array.
+// Compares user's answers to each friend in the array. 
+// Compatibility is determined by the differences in each answer.
+// The friend with the lowest score will be considered the closest match.
 function friendQuery(newFriend){
+
+	// GET information from friends API
 	$.ajax({url: currentURL + "/api/friends", method: "GET"}) 
 		.done(function(friendData) {
 			var compat = [];
 
+			// Cycles through each friend in array
 			for(i = 0; i < friendData.length; i++) {
 				var friendScore = friendData[i].scores;
 				var totalDif = 0;
+
+				// View your and each friend's scores in console
 				console.log(friendData[i].name + ": " + friendScore);
 			    console.log("Your Score: " + newFriend.scores);
 			    var compare = [];
 
+			    // Takes difference between each answer
 			    for(j = 0; j < 10; j++){
 			    	compare[j] = Math.abs(friendScore[j] - newFriend.scores[j]);
 					totalDif += compare[j];
 			    }
+
+			    // View total difference between each friend.
 				console.log(friendData[i].name + " Compatibility: " + totalDif);
 				compat[i] = totalDif;
 			}
+
 			var bestMatch = compat[0];
 			var bestFriend = friendData[0].name;
 			var friendImage = friendData[0].photo;																
-
+			// First friend in array is the best match by default.
+			// If another friend has a lower score, they become the new match.
 			for(i = 1; i < friendData.length; i++){
 				if(compat[i] < bestMatch){
 					bestMatch = compat[i];
@@ -202,24 +218,25 @@ function friendQuery(newFriend){
 					friendImage = friendData[i].photo;
 				}
 			}
+
+			// View the lowest score and friend match in console
 			console.log("Best Compatibility Rating: " + bestMatch);
 			console.log("Best Friend: " + bestFriend);
+
+			// Append friend match info into modal
 			$("#matchDisplay").append("<h4>" + bestFriend + "</h4><img src=" + friendImage + " width='750'>");
 			$('#friendModal').show();
+
+	// Posts user's data into friends API
 	$.post(currentURL + "/api/friends", 
 		newFriend,
 		function(){
-	    	// if(data == true){
-	    	// 	alert("Yay!")
-	    	// }
-	    	// if(data == false){
-	    	// 	alert("Sorry")
-	    	// }
-
-	});
 		});
-		
+	});
+
 }
+
+// When user clicks "X" in modal, exits modal and clears form
 $(".close").click(function(){
 	$("#matchDisplay").empty();
 	$("#friendModal").hide();
